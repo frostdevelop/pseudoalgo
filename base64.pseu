@@ -19,9 +19,10 @@ memacc = *memacc
 memacc = memacc & x
 memacc = memacc >> temp
 memacc = buf | memacc
-*SP = memacc
-SP++
+buf = afterpush
+jp push
 
+afterpush:
 temp = x
 x = ~x
 memacc = DATA + i
@@ -33,12 +34,33 @@ temp = x
 x = x nand 0x3F
 i++
 
-jz x, isz
+memacc = buf
+buf = rstvar
+jz x, push
 
 x << temp
 jp loop
 
-isz:
-*SP = buf
-SP++ 
-jp rstvar
+push:
+temp = memacc - 26
+jl temp, isupper
+temp = temp - 26
+jl temp, islower
+temp = temp - 10
+jl temp, isnum
+jz temp, isplus
+memacc = '/'
+jp endpush
+isplus:
+memacc = '+'
+jp endpush
+isnum:
+memacc = memacc - 75
+islower:
+memacc = memacc + 6
+isupper:
+memacc = memacc + 65
+endpush:
+*SP = memacc
+SP++
+jp buf

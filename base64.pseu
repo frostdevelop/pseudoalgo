@@ -39,5 +39,6 @@ x << temp
 jp loop
 
 isz:
-push( buf )
+*SP = buf
+SP++ 
 jp rstvar

@@ -49,10 +49,9 @@ jl temp, islower
 temp = temp - 10
 jl temp, isnum
 jz temp, isplus
-memacc = '/'
-jp endpush
+memacc = 66
 isplus:
-memacc = '+'
+memacc = memacc - 19
 jp endpush
 isnum:
 memacc = memacc - 75
